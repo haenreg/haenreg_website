@@ -1,1 +1,28 @@
-<p>login-page works!</p>
+<article class="text-white flex w-screen justify-around">
+    <section class="flex flex-col h-full gap-4">
+        <h1 class="text-4xl">
+            HænReg
+        </h1>
+        <span class="text-lg">
+            Hændelsesregistrering
+        </span>
+    </section>
+
+    <section class="border-r border-solid border-white"></section>
+
+    <section class="flex justify-center items-center flex-col gap-4">
+        <span class="text-2xl">
+            Log ind som:
+        </span>
+
+        <section class="flex gap-4">
+            <button (click)="login('kurt')">
+                Kurt
+            </button>
+
+            <button (click)="login('Bente')">
+                Bente
+            </button>    
+        </section>
+    </section>
+</article>
