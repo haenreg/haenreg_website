@@ -15,14 +15,18 @@
             Log ind som:
         </span>
 
-        <section class="flex gap-4">
-            <button (click)="login('kurt')">
-                Kurt
-            </button>
+        <section class="flex gap-4 text-black">
+            <app-button 
+                [buttonText]="'Kurt'"   
+                [buttonIcon]="'signin'" 
+                (onButtonClicked)="login('kurt')">
+            </app-button>
 
-            <button (click)="login('Bente')">
-                Bente
-            </button>    
+            <app-button 
+                [buttonText]="'Bente'" 
+                [buttonIcon]="'signin'" 
+                (onButtonClicked)="login('bente')">
+            </app-button>
         </section>
     </section>
 </article>

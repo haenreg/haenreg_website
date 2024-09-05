@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { UserStoreService } from '../stores/user-store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,10 @@ export class HttpService {
 
   private baseUrl = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private userStoreService: UserStoreService
+  ) {}
 
   // GET request
   getData(endpoint: string): Observable<any> {
@@ -18,7 +22,15 @@ export class HttpService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}` // Include the token here
     });
-    return this.http.get(`${this.baseUrl}/${endpoint}`, { headers });
+
+    return this.http.get(`${this.baseUrl}/${endpoint}`, { headers })
+      .pipe(
+        catchError(error => {
+          // If the request fails, clear the user and auth token
+          this.userStoreService.clearUser();
+          return throwError(error);
+        })
+      );
   }
 
   // POST request with Authorization header
@@ -28,7 +40,15 @@ export class HttpService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}` // Include the token here
     });
-    return this.http.post(`${this.baseUrl}/${endpoint}`, data, { headers });
+
+    return this.http.post(`${this.baseUrl}/${endpoint}`, data, { headers })
+      .pipe(
+        catchError(error => {
+          // If the request fails, clear the user and auth token
+          this.userStoreService.clearUser();
+          return throwError(error);
+        })
+      );
   }
 
   login(data: any): Observable<any> {
