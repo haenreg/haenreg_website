@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { authGuard } from './auth.guard';
 import { CreateResponseComponent } from './pages/create-response/create-response.component';
 import { ViewEventComponent } from './pages/view-event/view-event.component';
