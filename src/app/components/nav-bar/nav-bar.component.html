@@ -1,0 +1,17 @@
+<article class="w-full flex justify-between">
+    <section class="flex justify-center items-center">
+        <p class="capitalize">Velkommen {{ (userStore.user$ | async)?.username }}</p>
+    </section>
+
+    <section class="flex justify-center items-center">
+        <p class="capitalize">{{ (userStore.user$ | async)?.organization }}</p>
+    </section>
+
+    <section>
+        <app-button
+            [buttonText]="'Log ud'"
+            [buttonIcon]="'signout'"
+            (onButtonClicked)="onLogout()">
+        </app-button>
+    </section>
+</article>
