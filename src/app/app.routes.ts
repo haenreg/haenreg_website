@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { OverviewComponent } from './overview/overview.component';
-import { CreateResponseComponent } from './create-response/create-response.component';
-import { ViewEventComponent } from './view-event/view-event.component';
+import { OverviewComponent } from './pages/overview/overview.component';
+import { CreateResponseComponent } from './pages/create-response/create-response.component';
+import { ViewEventComponent } from './pages/view-event/view-event.component';
 
 export const routes: Routes = [
     { path: 'overview', component: OverviewComponent },
