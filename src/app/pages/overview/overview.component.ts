@@ -5,11 +5,13 @@ import { HttpService } from '../../services/http.service';
 import { TableFilter } from '../../interfaces/iTableFilter';
 import { Case } from '../../interfaces/iCase';
 import { Question } from '../../interfaces/iQuestion';
+import { TablePaginationComponent } from "../../components/table-pagination/table-pagination.component";
+import { TablePaginationReturn } from '../../interfaces/SearchInterfaces';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TablePaginationComponent],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
@@ -102,6 +104,10 @@ export class OverviewComponent implements OnInit{
 
   onClickPrint() {
     console.log(this.formGroup.get('checkboxes').value);
+  }
+
+  fetchCases(pagination: TablePaginationReturn) {
+    console.log(pagination);
   }
 
 }

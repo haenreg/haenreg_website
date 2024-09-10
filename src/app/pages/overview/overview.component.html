@@ -66,6 +66,12 @@
                 </tbody>
             </table>
         </form>
+        <app-table-pagination
+            [currentPage]="currentPage"
+            [totalResults]="totalItems"
+            [totalPages]="totalPages"
+            (onPageChange)="fetchCases($event)"
+            ></app-table-pagination>
 
         <div class="actions-group">
             <button class="see-all-btn" >Se alle hændelser</button>
