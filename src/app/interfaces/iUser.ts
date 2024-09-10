@@ -1,6 +1,6 @@
 export interface iUser {
     id?: number;
     username: string;
-    organization: string;
+    organization?: string;
     isLeader?: boolean;
 }

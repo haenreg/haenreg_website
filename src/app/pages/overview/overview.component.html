@@ -27,46 +27,70 @@
         </div>
         </div>
         <form [formGroup]="formGroup">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Vælg</th>
-                        <th *ngFor="let question of questions">{{ question.title }}</th>
-                        <th>Se mere</th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="dataRows.length > 0 && formGroup">
-                    <tr *ngFor="let row of dataRows; let i = index">
-                        <td [formGroupName]="'checkboxes'">
-                            <input type="checkbox" [formControlName]="row.id.toString()">
-                        </td>
-                
-                        <td *ngFor="let question of questions">
-                            <ng-container *ngIf="row.answers">
-                                <span *ngFor="let answer of row.answers">
-                                    <span *ngIf="answer.question.id === question.id">
-                                        <ng-container
-                                            *ngIf="answer.question.type === 'SELECT_ONE' || answer.question.type === 'MULTI_SELECT'; else showAnswer">
-                                            <ng-container *ngIf="answer.answerChoices && answer.answerChoices.length > 0">
-                                                <ng-container *ngFor="let choice of answer.answerChoices">
-                                                    <span *ngIf="choice.questionChoice && choice.questionChoice.choice">{{
-                                                        choice.questionChoice.choice }}</span>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vælg</th>
+                            <th>Personale</th>
+                            <th *ngFor="let question of questions">{{ question.title }}</th>
+                            <th>Godkendt</th>
+                            <th>Se mere</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="dataRows.length > 0 && formGroup">
+                        <tr *ngFor="let row of dataRows; let i = index">
+                            <!-- Checkbox -->
+                            <td [formGroupName]="'checkboxes'">
+                                <input type="checkbox" [formControlName]="row.id.toString()">
+                            </td>
+
+                            <td class="capitalize">{{ row.user?.username || 'Unknown' }}</td>
+        
+                            <!-- Answer columns for each question -->
+                            <td *ngFor="let question of questions">
+                                <ng-container *ngIf="row.answers">
+                                    <span *ngFor="let answer of row.answers">
+                                        <span *ngIf="answer.question.id === question.id">
+                                            <ng-container
+                                                *ngIf="answer.question.type === 'SELECT_ONE' || answer.question.type === 'MULTI_SELECT'; else showAnswer">
+                                                <ng-container *ngIf="answer.answerChoices && answer.answerChoices.length > 0">
+                                                    <ng-container *ngFor="let choice of answer.answerChoices">
+                                                        <span *ngIf="choice.questionChoice && choice.questionChoice.choice">
+                                                            {{ choice.questionChoice.choice }}
+                                                        </span>
+                                                    </ng-container>
                                                 </ng-container>
                                             </ng-container>
-                                        </ng-container>
-                
-                                        <ng-template #showAnswer>
-                                            <span *ngIf="answer.answer">{{ answer.answer }}</span>
-                                        </ng-template>
+                                            <ng-template #showAnswer>
+                                                <span *ngIf="answer.answer">{{ answer.answer }}</span>
+                                            </ng-template>
+                                        </span>
                                     </span>
-                                </span>
-                            </ng-container>
-                        </td>
-                        <td><button (click)="viewMore(row)">Se mere</button></td>
-                    </tr>
-                </tbody>
-            </table>
+                                </ng-container>
+                            </td>
+                            
+                            <td>
+                                <ng-container [ngSwitch]="row.approved">
+                                    <i *ngSwitchCase="'APPROVED'" class="uil uil-check text-green-600 text-3xl" title="Approved"></i>
+                            
+                                    <i *ngSwitchCase="'WAITING'" class="uil uil-hourglass text-yellow-600 text-3xl" title="Waiting"></i>
+                            
+                                    <i *ngSwitchCase="'NOT_APPROVED'" class="uil uil-times text-red-600 text-3xl" title="Not Approved"></i>
+                            
+                                    <i *ngSwitchDefault class="uil uil-question-circle" title="Unknown Status"></i>
+                                </ng-container>
+                            </td>
+
+        
+                            <td><button (click)="viewMore(row)">Se mere</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </form>
+
+
         <app-table-pagination
             [currentPage]="currentPage"
             [totalResults]="totalItems"
