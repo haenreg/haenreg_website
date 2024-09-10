@@ -25,38 +25,51 @@
             <button class="create-button">Opret svar</button>
         </div>
         </div>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Vælg</th> <!-- Ny overskrift for checkbox kolonne -->
-                    <th>Personale</th>
-                    <th>Elev</th>
-                    <th>Tidspunkt</th>
-                    <th>Type</th>
-                    <th>Reaktion</th>
-                    <th>Konsekvens</th>
-                    <th>Underskrevet</th>
-                    <th>Se mere</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let row of rows">
-                    <td><input type="checkbox" [(ngModel)]="row.selected"></td> <!-- Checkbox kolonne -->
-                    <td>{{ row.personale }}</td>
-                    <td>{{ row.elev }}</td>
-                    <td>{{ row.tidspunkt }}</td>
-                    <td>{{ row.type }}</td>
-                    <td>{{ row.reaktion }}</td>
-                    <td>{{ row.konsekvens }}</td>
-                    <td>{{ row.underskrevet }}</td>
-                    <td><button (click)="viewMore(row)">Se mere</button></td>
-                </tr>
-            </tbody>
-        </table>
+        <form [formGroup]="formGroup">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vælg</th>
+                        <th *ngFor="let question of questions">{{ question.title }}</th>
+                        <th>Se mere</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="dataRows.length > 0 && formGroup">
+                    <tr *ngFor="let row of dataRows; let i = index">
+                        <td [formGroupName]="'checkboxes'">
+                            <input type="checkbox" [formControlName]="row.id.toString()">
+                        </td>
+                
+                        <td *ngFor="let question of questions">
+                            <ng-container *ngIf="row.answers">
+                                <span *ngFor="let answer of row.answers">
+                                    <span *ngIf="answer.question.id === question.id">
+                                        <ng-container
+                                            *ngIf="answer.question.type === 'SELECT_ONE' || answer.question.type === 'MULTI_SELECT'; else showAnswer">
+                                            <ng-container *ngIf="answer.answerChoices && answer.answerChoices.length > 0">
+                                                <ng-container *ngFor="let choice of answer.answerChoices">
+                                                    <span *ngIf="choice.questionChoice && choice.questionChoice.choice">{{
+                                                        choice.questionChoice.choice }}</span>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                
+                                        <ng-template #showAnswer>
+                                            <span *ngIf="answer.answer">{{ answer.answer }}</span>
+                                        </ng-template>
+                                    </span>
+                                </span>
+                            </ng-container>
+                        </td>
+                        <td><button (click)="viewMore(row)">Se mere</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
         <div class="actions-group">
             <button class="see-all-btn" >Se alle hændelser</button>
-            <button class="print-button">Udskriv</button>
+            <button class="print-button" (click)="onClickPrint()">Udskriv</button>
         </div>
     </div>
 </article>
