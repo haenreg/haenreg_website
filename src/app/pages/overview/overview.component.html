@@ -8,10 +8,11 @@
                     <option value="asc">Dato ↑</option>
                 </select>
             </div>
-            <div class="control-group">
+            <div [formGroup]="formGroup" class="control-group">
                 <label for="name-select">Filtrer personale:</label>
-                <select id="name-select" class="dropdown" [(ngModel)]="selectedName">
-                    <option *ngFor="let name of names" [value]="name">{{ name }}</option>
+                <select id="name-select" class="dropdown capitalize" formControlName="selectedUserId">
+                    <option [value]="null">Alle</option>
+                    <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
                 </select>
             </div>
             <div class="control-group">
@@ -71,7 +72,7 @@
             [totalResults]="totalItems"
             [totalPages]="totalPages"
             (onPageChange)="paginate($event)"
-            ></app-table-pagination>
+        ></app-table-pagination>
 
         <div class="actions-group">
             <button class="see-all-btn" >Se alle hændelser</button>

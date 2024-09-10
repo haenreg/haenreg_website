@@ -29,15 +29,18 @@ export class TablePaginationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.paginationForm.controls['page'].setValue(this.currentPage);
-    this.paginationForm.controls['limit'].setValue(this.limit);
+    // Ensure page form control value is set without triggering valueChanges
+    this.paginationForm.controls['page'].setValue(this.currentPage, { emitEvent: false });
+    this.paginationForm.controls['limit'].setValue(this.limit, { emitEvent: false });
 
+    // Subscribe to value changes for the page input
     this.paginationForm.get('page')?.valueChanges.subscribe((newPage: number) => {
       this.changePage(newPage, this.paginationForm.controls['limit'].value);
     });
 
+    // Subscribe to value changes for the limit dropdown
     this.paginationForm.get('limit')?.valueChanges.subscribe((newLimit: number) => {
-      this.changePage(1, newLimit);
+      this.changePage(1, newLimit);  // Reset to page 1 when limit changes
     });
   }
 
@@ -46,13 +49,17 @@ export class TablePaginationComponent implements OnInit {
       this.currentPage = newPage;
       this.limit = newLimit;
 
+      // Use emitEvent: false to avoid triggering valueChanges again
       this.paginationForm.controls['page'].setValue(this.currentPage, { emitEvent: false });
 
+      // Emit the new pagination information
       this.onPageChange.emit({ page: this.currentPage, limit: this.limit });
     } else {
-      this.paginationForm.controls['page'].setValue(this.currentPage);
+      // Reset the form control to current page if invalid
+      this.paginationForm.controls['page'].setValue(this.currentPage, { emitEvent: false });
     }
   }
+
 
   prevPage() {
     if (this.currentPage > 1) {

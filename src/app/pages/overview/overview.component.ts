@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { HttpService } from '../../services/http.service';
 import { TableFilter } from '../../interfaces/iTableFilter';
 import { Case } from '../../interfaces/iCase';
 import { Question } from '../../interfaces/iQuestion';
 import { TablePaginationComponent } from "../../components/table-pagination/table-pagination.component";
 import { TablePaginationReturn } from '../../interfaces/SearchInterfaces';
+import { iUser } from '../../interfaces/iUser';
 
 @Component({
   selector: 'app-overview',
@@ -28,10 +29,13 @@ export class OverviewComponent implements OnInit{
   public currentPage: number = 1;
   public totalPages: number = -1;
   public totalItems: number = -1;
+  public limit: number = 15;
 
   public dataRows: Case[] = [];
 
   public questions: Question[] = [];
+
+  public users: iUser[] = [];
   
   // Variabler til ngModel
   selectedDateSort: string = 'desc';  // Standardværdi
@@ -65,6 +69,14 @@ export class OverviewComponent implements OnInit{
         console.error('Error fetching questions!', error);
       }
     );
+
+    this.httpService.getData('users/get-all').subscribe(
+      (response) => {
+        this.users = response;
+      }, (error) => {
+        console.error('Error fetching users!', error);
+      }
+    );
   }
 
   viewMore(row: any) {
@@ -74,13 +86,23 @@ export class OverviewComponent implements OnInit{
 
   createFormGroup() {
     this.formGroup = this.fb.group({
-      checkboxes: this.fb.group({})
+      checkboxes: this.fb.group({}),  // Dynamically add checkboxes here later
+      selectedUserId: new FormControl(null),  // Default to 'All Users' (null)
     });
 
-    this.createCheckboxControls();
+    // Listen to changes in selectedUserId to fetch cases
+    this.formGroup.get('selectedUserId')?.valueChanges.subscribe(selectedId => {
+      if (selectedId === null) {
+        console.log("Fetching cases for all users...");
+      } else {
+        console.log(`Fetching cases for user with ID: ${selectedId}`);
+      }
+      this.fetchWithParams(selectedId); // Fetch cases based on selected user
+    });
   }
 
   createCheckboxControls() {
+    // this.formGroup.get('checkboxes').setValue(this.fb.group({}));
     const checkboxGroup = this.formGroup.get('checkboxes') as FormGroup;
 
     this.dataRows.forEach((row) => {
@@ -93,12 +115,23 @@ export class OverviewComponent implements OnInit{
   }
 
   paginate(pagination: TablePaginationReturn) {
-    const tableFilter: TableFilter = {
-      page: pagination.page,
-      limit: +pagination.limit
+    this.limit = +pagination.limit;
+    this.currentPage = pagination.page;
+    this.fetchWithParams();
+  }
+
+  fetchWithParams(selectedUserId?: number | null) {
+    const filterData: TableFilter = {
+      userId: selectedUserId,
+      page: this.currentPage,
+      limit: 10,  // Adjust this as needed
     };
 
-    this.fetchCases(tableFilter);
+    if (!filterData.userId || filterData.userId.toString() === 'null') {
+      delete filterData.userId;
+    }
+
+    this.fetchCases(filterData);  // Call fetchCases to get the data
   }
 
   fetchCases(filterData: TableFilter) {
@@ -109,7 +142,9 @@ export class OverviewComponent implements OnInit{
         this.totalPages = data.totalPages;
         this.totalItems = data.totalItems;
         this.dataRows = data.data as Case[];
-        this.createFormGroup();
+
+        // Now update checkboxes based on fetched cases
+        this.updateCheckboxes();
       },
       (error) => {
         console.error('Error fetching cases:', error);
@@ -117,5 +152,18 @@ export class OverviewComponent implements OnInit{
     );
   }
 
+  updateCheckboxes() {
+    const checkboxGroup = this.formGroup.get('checkboxes') as FormGroup;
+
+    Object.keys(checkboxGroup.controls).forEach(key => {
+      checkboxGroup.removeControl(key);
+    });
+
+    this.dataRows.forEach(row => {
+      checkboxGroup.addControl(row.id.toString(), new FormControl(false));  // Default unchecked
+    });
+
+    this.formGroup.patchValue({ checkboxes: checkboxGroup.value }, { emitEvent: false });
+  }
 }
 
