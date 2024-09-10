@@ -33,7 +33,11 @@
                         <tr>
                             <th>Vælg</th>
                             <th>Personale</th>
-                            <th *ngFor="let question of questions">{{ question.title }}</th>
+                            <th *ngFor="let question of questions" (click)="sortByQuestion(question)">
+                                {{ question.title }}
+                                <i *ngIf="sortField === question.id && sortOrder === 'ASC'" class="uil uil-arrow-up"></i>
+                                <i *ngIf="sortField === question.id && sortOrder === 'DESC'" class="uil uil-arrow-down"></i>
+                            </th>
                             <th>Godkendt</th>
                             <th>Se mere</th>
                         </tr>

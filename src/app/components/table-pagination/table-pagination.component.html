@@ -1,15 +1,15 @@
 <article class="pagination-container">
     <form [formGroup]="paginationForm">
-        <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+        <button (click)="prevPage()" [disabled]="currentPage === 1">Forrige</button>
 
-        <span>Page</span>
+        <span>Side</span>
         <input type="number" formControlName="page" min="1" [max]="totalPages" />
-        <span>of {{ totalPages }}</span>
+        <span>af {{ totalPages }}</span>
 
-        <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">Næste</button>
 
         <label>
-            Items per page:
+            Sager per side:
             <select formControlName="limit">
                 <option *ngFor="let option of limitOptions" [value]="option">{{ option }}</option>
             </select>

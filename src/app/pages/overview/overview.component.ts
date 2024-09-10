@@ -36,6 +36,9 @@ export class OverviewComponent implements OnInit{
   public questions: Question[] = [];
 
   public users: iUser[] = [];
+
+  public sortField: number | null = null;
+  public sortOrder: string = 'ASC';
   
   // Variabler til ngModel
   selectedDateSort: string = 'desc';  // Standardværdi
@@ -125,6 +128,8 @@ export class OverviewComponent implements OnInit{
       userId: selectedUserId,
       page: this.currentPage,
       limit: 10,  // Adjust this as needed
+      sortField: this.sortField,
+      sortOrder: this.sortOrder
     };
 
     if (!filterData.userId || filterData.userId.toString() === 'null') {
@@ -164,6 +169,19 @@ export class OverviewComponent implements OnInit{
     });
 
     this.formGroup.patchValue({ checkboxes: checkboxGroup.value }, { emitEvent: false });
+  }
+
+  sortByQuestion(question: any) {
+    if (this.sortField === question.id) {
+      // If the same question is clicked again, toggle the sortOrder
+      this.sortOrder = this.sortOrder === 'ASC' ? 'DESC' : 'ASC';
+    } else {
+      // If a new question is clicked, set the sortField and reset sortOrder to ASC
+      this.sortField = question.id;
+      this.sortOrder = 'ASC';
+    }
+    
+    this.fetchWithParams();
   }
 }
 
