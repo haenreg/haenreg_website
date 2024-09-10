@@ -45,6 +45,9 @@ export class TablePaginationComponent implements OnInit {
     if (newPage > 0 && newPage <= this.totalPages) {
       this.currentPage = newPage;
       this.limit = newLimit;
+
+      this.paginationForm.controls['page'].setValue(this.currentPage, { emitEvent: false });
+
       this.onPageChange.emit({ page: this.currentPage, limit: this.limit });
     } else {
       this.paginationForm.controls['page'].setValue(this.currentPage);

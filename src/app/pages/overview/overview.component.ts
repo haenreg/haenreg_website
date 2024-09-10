@@ -53,23 +53,10 @@ export class OverviewComponent implements OnInit{
 
     const filterData: TableFilter = {
       page: 1,
-      limit: 10
+      limit: 2
     };
 
-    this.httpService.postData('cases/get-all-cases', filterData).subscribe(
-      (response) => {
-        const data = response;
-        this.currentPage = data.currentPage;
-        this.totalPages = data.totalPages;
-        this.totalItems = data.totalItems;
-        this.dataRows = data.data as Case[];
-        console.log(this.dataRows);
-        this.createFormGroup();
-      },
-      (error) => {
-        console.error('Error fetching cases:', error);
-      }
-    );
+    this.fetchCases(filterData);
 
     this.httpService.getData('questions/get-questions').subscribe(
       (response) => {
@@ -106,8 +93,31 @@ export class OverviewComponent implements OnInit{
     console.log(this.formGroup.get('checkboxes').value);
   }
 
-  fetchCases(pagination: TablePaginationReturn) {
-    console.log(pagination);
+  paginate(pagination: TablePaginationReturn) {
+    const tableFilter: TableFilter = {
+      page: pagination.page,
+      limit: +pagination.limit
+    };
+
+    this.fetchCases(tableFilter);
+  }
+
+
+  fetchCases(filterData: TableFilter) {
+    this.httpService.postData('cases/get-all-cases', filterData).subscribe(
+      (response) => {
+        const data = response;
+        this.currentPage = data.currentPage;
+        this.totalPages = data.totalPages;
+        this.totalItems = data.totalItems;
+        this.dataRows = data.data as Case[];
+        console.log(this.dataRows);
+        this.createFormGroup();
+      },
+      (error) => {
+        console.error('Error fetching cases:', error);
+      }
+    );
   }
 
 }
