@@ -1,17 +1,13 @@
 <article class="pagination-container">
     <form [formGroup]="paginationForm">
-        <!-- Previous Page Button -->
         <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
 
-        <!-- Page Number Input -->
         <span>Page</span>
         <input type="number" formControlName="page" min="1" [max]="totalPages" />
         <span>of {{ totalPages }}</span>
 
-        <!-- Next Page Button -->
         <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
 
-        <!-- Items per page dropdown -->
         <label>
             Items per page:
             <select formControlName="limit">

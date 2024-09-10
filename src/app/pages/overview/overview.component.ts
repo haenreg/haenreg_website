@@ -61,7 +61,6 @@ export class OverviewComponent implements OnInit{
     this.httpService.getData('questions/get-questions').subscribe(
       (response) => {
         this.questions = response;
-        console.log(this.questions);
       }, (error) => {
         console.error('Error fetching questions!', error);
       }
@@ -102,7 +101,6 @@ export class OverviewComponent implements OnInit{
     this.fetchCases(tableFilter);
   }
 
-
   fetchCases(filterData: TableFilter) {
     this.httpService.postData('cases/get-all-cases', filterData).subscribe(
       (response) => {
@@ -111,7 +109,6 @@ export class OverviewComponent implements OnInit{
         this.totalPages = data.totalPages;
         this.totalItems = data.totalItems;
         this.dataRows = data.data as Case[];
-        console.log(this.dataRows);
         this.createFormGroup();
       },
       (error) => {

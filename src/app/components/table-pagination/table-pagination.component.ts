@@ -37,7 +37,7 @@ export class TablePaginationComponent implements OnInit {
     });
 
     this.paginationForm.get('limit')?.valueChanges.subscribe((newLimit: number) => {
-      this.changePage(1, newLimit);  // Reset to page 1 when limit changes
+      this.changePage(1, newLimit);
     });
   }
 
