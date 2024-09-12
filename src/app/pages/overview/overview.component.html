@@ -9,9 +9,13 @@
                 </select>
             </div>
             <div class="control-group">
-            <label id="create-label" for="create-btn">#</label>
-            <button class="create-button">Opret svar</button>
-        </div>
+                <label id="create-label" for="create-btn">#</label>
+                <button class="create-button" (click)="approve()">Godkend valgte</button>
+            </div>
+            <div class="control-group">
+                <label id="create-label" for="create-btn">#</label>
+                <button class="create-button" (click)="disprove()">Afvis valgte</button>
+            </div>
         </div>
         <form [formGroup]="formGroup">
             <div class="table-container">

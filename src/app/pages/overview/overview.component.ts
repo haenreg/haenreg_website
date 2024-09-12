@@ -8,6 +8,7 @@ import { Question } from '../../interfaces/iQuestion';
 import { TablePaginationComponent } from "../../components/table-pagination/table-pagination.component";
 import { TablePaginationReturn } from '../../interfaces/SearchInterfaces';
 import { iUser } from '../../interfaces/iUser';
+import { catchError, forkJoin, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-overview',
@@ -181,6 +182,54 @@ export class OverviewComponent implements OnInit{
     }
     
     this.fetchWithParams();
+  }
+
+disprove() {
+  const requests = this.getCheckedCases().map(id => 
+    this.httpService.getData(`cases/disprove-case/${id}`).pipe(
+      catchError(error => {
+        console.error(`Error disproving case with id ${id}`, error);
+        return throwError(error);
+      })
+    )
+  );
+
+  forkJoin(requests).subscribe({
+    next: () => {
+      this.fetchWithParams();
+    },
+    error: (error) => {
+      console.error('Error in batch request', error);
+    }
+  });
+}
+
+  approve() {
+    const requests = this.getCheckedCases().map(id => 
+    this.httpService.getData(`cases/approve-case/${id}`).pipe(
+      catchError(error => {
+        console.error(`Error approving case with id ${id}`, error);
+        return throwError(error);
+      })
+    )
+  );
+
+  forkJoin(requests).subscribe({
+    next: () => {
+      this.fetchWithParams();
+    },
+    error: (error) => {
+      console.error('Error in batch request', error);
+    }
+  });
+}
+
+  getCheckedCases(): number[] {
+    const checkedCases: number[] = Object.entries(this.formGroup.get('checkboxes').value)
+    .filter(([key, value]) => value === true)
+    .map(([key]) => Number(key));
+
+    return checkedCases;
   }
 }
 
