@@ -4,4 +4,5 @@ export interface TableFilter {
     userId?: number;
     sortField?: number;
     sortOrder?: string;
+    status?: string;
 }

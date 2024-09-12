@@ -8,6 +8,15 @@
                     <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
                 </select>
             </div>
+            <div [formGroup]="formGroup" class="control-group">
+                <label for="name-select">Filtrer godkendt:</label>
+                <select id="name-select" class="dropdown capitalize" formControlName="caseStatus">
+                    <option [value]="null">Alle</option>
+                    <option *ngFor="let sta of status" [value]="sta.value">
+                        {{ sta.label }}
+                    </option>
+                </select>
+            </div>
             <div class="control-group">
                 <label id="create-label" for="create-btn">#</label>
                 <button class="create-button" (click)="approve()">Godkend valgte</button>

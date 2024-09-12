@@ -37,6 +37,11 @@ export class OverviewComponent implements OnInit{
   public questions: Question[] = [];
 
   public users: iUser[] = [];
+  public status: { value: string, label: string }[] = [
+    { value: 'WAITING', label: 'Venter på svar' },
+    { value: 'APPROVED', label: 'Godkendt' },
+    { value: 'NOT_APPROVED', label: 'Afvist' }
+  ];
 
   public sortField: number | null = null;
   public sortOrder: string = 'ASC';
@@ -91,17 +96,16 @@ export class OverviewComponent implements OnInit{
   createFormGroup() {
     this.formGroup = this.fb.group({
       checkboxes: this.fb.group({}),  // Dynamically add checkboxes here later
-      selectedUserId: new FormControl(null),  // Default to 'All Users' (null)
+      selectedUserId: new FormControl(null),
+      caseStatus: new FormControl(null),
     });
 
-    // Listen to changes in selectedUserId to fetch cases
     this.formGroup.get('selectedUserId')?.valueChanges.subscribe(selectedId => {
-      if (selectedId === null) {
-        console.log("Fetching cases for all users...");
-      } else {
-        console.log(`Fetching cases for user with ID: ${selectedId}`);
-      }
-      this.fetchWithParams(selectedId); // Fetch cases based on selected user
+      this.fetchWithParams();
+    });
+
+    this.formGroup.get('caseStatus')?.valueChanges.subscribe(caseStatus => {
+      this.fetchWithParams();
     });
   }
 
@@ -128,13 +132,18 @@ export class OverviewComponent implements OnInit{
     const filterData: TableFilter = {
       userId: this.formGroup.get('selectedUserId').value,
       page: this.currentPage,
-      limit: 10,  // Adjust this as needed
+      limit: 10,
       sortField: this.sortField,
-      sortOrder: this.sortOrder
+      sortOrder: this.sortOrder,
+      status: this.formGroup.get('caseStatus').value
     };
 
     if (!filterData.userId || filterData.userId.toString() === 'null') {
       delete filterData.userId;
+    }
+
+    if (!filterData.status || filterData.status.toString() === 'null') {
+      delete filterData.status;
     }
 
     this.fetchCases(filterData);  // Call fetchCases to get the data
