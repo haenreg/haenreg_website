@@ -125,7 +125,7 @@ export class OverviewComponent implements OnInit{
 
   fetchWithParams(selectedUserId?: number | null) {
     const filterData: TableFilter = {
-      userId: selectedUserId,
+      userId: this.formGroup.get('selectedUserId').value,
       page: this.currentPage,
       limit: 10,  // Adjust this as needed
       sortField: this.sortField,
@@ -173,7 +173,6 @@ export class OverviewComponent implements OnInit{
 
   sortByQuestion(question: any) {
     if (this.sortField === question.id) {
-      // If the same question is clicked again, toggle the sortOrder
       this.sortOrder = this.sortOrder === 'ASC' ? 'DESC' : 'ASC';
     } else {
       // If a new question is clicked, set the sortField and reset sortOrder to ASC

@@ -1,24 +1,11 @@
 <article>
     <div class="container">
         <div class="controls">
-            <div class="control-group">
-                <label for="date-sort">Sorter efter dato:</label>
-                <select id="date-sort" class="dropdown" [(ngModel)]="selectedDateSort">
-                    <option value="desc">Dato ↓</option>
-                    <option value="asc">Dato ↑</option>
-                </select>
-            </div>
             <div [formGroup]="formGroup" class="control-group">
                 <label for="name-select">Filtrer personale:</label>
                 <select id="name-select" class="dropdown capitalize" formControlName="selectedUserId">
                     <option [value]="null">Alle</option>
                     <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="category-select">Filtrer elev:</label>
-                <select id="category-select" class="dropdown" [(ngModel)]="selectedCategory">
-                    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
                 </select>
             </div>
             <div class="control-group">
