@@ -1,0 +1,18 @@
+<div class="slider-container">
+    <h2>{{ title }}</h2> 
+    <p>{{ description }}</p> 
+    <input
+      type="range"
+      [min]="min"
+      [max]="max"
+      [step]="1"
+      [(ngModel)]="currentRating"
+      disabled
+      class="slider"
+    />
+  
+
+    <div class="slider-value">{{ currentRating }}</div>
+
+  </div>
+  

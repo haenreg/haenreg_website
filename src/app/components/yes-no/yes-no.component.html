@@ -1,0 +1,20 @@
+<div class="yes-no-container">
+    <h2>{{ title }}</h2>
+    <p>{{ description }}</p>
+  
+    <div class="option-container">
+      <span
+        class="option"
+        [class.selected]="answer === 'YES'"
+      >
+        Ja
+      </span>
+      <span
+        class="option"
+        [class.selected]="answer === 'NO'"
+      >
+        Nej
+      </span>
+    </div>
+  </div>
+  

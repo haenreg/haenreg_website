@@ -1,0 +1,27 @@
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 750px;
+    margin: 20px auto;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #cdc0af;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  
+  
+  .slider-value {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+ 
+  
