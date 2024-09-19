@@ -7,14 +7,20 @@ import { OverviewComponent } from './pages/overview/overview.component';
 import { FieldsComponent } from './components/fields/fields.component';
 import { ScaleComponent } from './components/scale/scale.component';
 import { YesNoComponent } from './components/yes-no/yes-no.component';
+import { DetailsPageComponent } from './pages/details-page/details-page.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'login', component: LoginPageComponent },
-    { path: 'overview', component: OverviewComponent, canActivate: [authGuard] },
-    { path: 'view-event', component: ViewEventComponent },
-    { path: 'create-response', component: CreateResponseComponent },
-    { path: 'fields', component: FieldsComponent },
-    { path: 'scale', component: ScaleComponent },
-    { path: 'yes-no', component: YesNoComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginPageComponent },
+  { path: 'overview', component: OverviewComponent, canActivate: [authGuard] },
+  {
+    path: 'view-case/:id',
+    component: DetailsPageComponent,
+    canActivate: [authGuard],
+  },
+  { path: 'view-event', component: ViewEventComponent },
+  { path: 'create-response', component: CreateResponseComponent },
+  { path: 'fields', component: FieldsComponent },
+  { path: 'scale', component: ScaleComponent },
+  { path: 'yes-no', component: YesNoComponent },
 ];
