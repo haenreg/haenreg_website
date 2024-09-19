@@ -9,6 +9,7 @@ import { ScaleComponent } from './components/scale/scale.component';
 import { YesNoComponent } from './components/yes-no/yes-no.component';
 import { DetailsPageComponent } from './pages/details-page/details-page.component';
 import { ManageQuestionsPageComponent } from './pages/manage-questions-page/manage-questions-page.component';
+import { AdministrateQuestionComponent } from './pages/administrate-question/administrate-question.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -22,6 +23,11 @@ export const routes: Routes = [
   {
     path: 'manage-questions',
     component: ManageQuestionsPageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'administrate-question',
+    component: AdministrateQuestionComponent,
     canActivate: [authGuard],
   },
   { path: 'view-event', component: ViewEventComponent },
