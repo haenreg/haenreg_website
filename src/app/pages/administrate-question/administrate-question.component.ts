@@ -9,6 +9,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { QuestionChoice } from '../../interfaces/iQuestionChoice';
 
 @Component({
   selector: 'app-administrate-question',
@@ -20,7 +21,8 @@ import { CommonModule } from '@angular/common';
 export class AdministrateQuestionComponent implements OnInit {
   private question: Question;
   public formGroup: FormGroup;
-  questionTypes = Object.values(QuestionType);
+  public questionTypes = Object.values(QuestionType);
+  public questionChoice: QuestionChoice[] = [];
 
   constructor(
     private questionService: QuestionService,
@@ -29,6 +31,9 @@ export class AdministrateQuestionComponent implements OnInit {
 
   ngOnInit() {
     this.question = this.questionService.getQuestion();
+    if (this.question) {
+      this.questionChoice = this.question.questionChoices;
+    }
 
     this.formGroup = this.fb.group({
       title: new FormControl(this.question ? this.question.title : ''),

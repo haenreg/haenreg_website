@@ -18,5 +18,14 @@
                 <option *ngFor="let type of questionTypes" [value]="type">{{ type }}</option>
               </select>
         </section>
+        <ng-container *ngIf="formGroup.get('type')?.value === 'MULTI_SELECT' || formGroup.get('type')?.value === 'SELECT_ONE'">
+            <ng-container *ngFor="let choice of questionChoice">
+                <section>
+
+    
+                </section>
+            </ng-container>
+
+        </ng-container>
     </form>
 </article>
