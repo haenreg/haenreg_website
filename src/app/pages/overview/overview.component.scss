@@ -51,6 +51,7 @@
 table {
     width: 100%;
     margin: 20px 0;
+    table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
     border-radius: 20px;
@@ -99,4 +100,34 @@ th {
     font-size: 16px;
     height: 30px;
     border: none;
+}
+
+.table-container {
+    max-height: 480px;
+    overflow-y: auto;
+    overflow-x: auto;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9;
+    z-index: 1;
+}
+
+tbody td {
+    padding: 8px;
+    // text-align: left;
+}
+
+th,
+td {
+    text-align: center;
+    padding: 10px;
 }

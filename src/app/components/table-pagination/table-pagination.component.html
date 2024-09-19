@@ -1,0 +1,18 @@
+<article class="pagination-container">
+    <form [formGroup]="paginationForm">
+        <button (click)="prevPage()" [disabled]="currentPage === 1">Forrige</button>
+
+        <span>Side</span>
+        <input type="number" formControlName="page" min="1" [max]="totalPages" />
+        <span>af {{ totalPages }}</span>
+
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages">Næste</button>
+
+        <label>
+            Sager per side:
+            <select formControlName="limit">
+                <option *ngFor="let option of limitOptions" [value]="option">{{ option }}</option>
+            </select>
+        </label>
+    </form>
+</article>
