@@ -1,1 +1,22 @@
-<p>administrate-question works!</p>
+<article>
+    <form [formGroup]="formGroup" class="flex flex-col gap-8">
+
+        <section class="flex flex-col">
+            <label for="title">Titel: </label>
+            <input id="title" formControlName="title">
+        </section>
+
+        <section class="flex flex-col">
+            <label for="description">Beskrivelse: </label>
+            <input id="description" formControlName="description">
+        </section>
+
+
+        <section class="flex flex-col">
+            <label for="type">Type: </label>
+            <select id="type" formControlName="type" class="form-select rounded-lg border border-gray-300 p-2 text-gray-900">
+                <option *ngFor="let type of questionTypes" [value]="type">{{ type }}</option>
+              </select>
+        </section>
+    </form>
+</article>
