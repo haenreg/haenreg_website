@@ -37,8 +37,6 @@ export class LoginPageComponent {
 
     this.httpService.login({ username: name, password: password }).subscribe(
       response => {
-        console.log('Login successful:', response);
-        // Assuming the response contains username and organization
         const authToken = response.token; 
         const user: iUser = {
           username: response.username,

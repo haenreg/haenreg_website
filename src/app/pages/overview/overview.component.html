@@ -1,62 +1,110 @@
 <article>
     <div class="container">
         <div class="controls">
-            <div class="control-group">
-                <label for="date-sort">Sorter efter dato:</label>
-                <select id="date-sort" class="dropdown" [(ngModel)]="selectedDateSort">
-                    <option value="desc">Dato ↓</option>
-                    <option value="asc">Dato ↑</option>
-                </select>
-            </div>
-            <div class="control-group">
+            <div [formGroup]="formGroup" class="control-group">
                 <label for="name-select">Filtrer personale:</label>
-                <select id="name-select" class="dropdown" [(ngModel)]="selectedName">
-                    <option *ngFor="let name of names" [value]="name">{{ name }}</option>
+                <select id="name-select" class="dropdown capitalize" formControlName="selectedUserId">
+                    <option [value]="null">Alle</option>
+                    <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
+                </select>
+            </div>
+            <div [formGroup]="formGroup" class="control-group">
+                <label for="name-select">Filtrer godkendt:</label>
+                <select id="name-select" class="dropdown capitalize" formControlName="caseStatus">
+                    <option [value]="null">Alle</option>
+                    <option *ngFor="let sta of status" [value]="sta.value">
+                        {{ sta.label }}
+                    </option>
                 </select>
             </div>
             <div class="control-group">
-                <label for="category-select">Filtrer elev:</label>
-                <select id="category-select" class="dropdown" [(ngModel)]="selectedCategory">
-                    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-                </select>
+                <label id="create-label" for="create-btn">#</label>
+                <button class="create-button" (click)="approve()">Godkend valgte</button>
             </div>
             <div class="control-group">
-            <label id="create-label" for="create-btn">#</label>
-            <button class="create-button">Opret svar</button>
+                <label id="create-label" for="create-btn">#</label>
+                <button class="create-button" (click)="disprove()">Afvis valgte</button>
+            </div>
         </div>
-        </div>
+        <form [formGroup]="formGroup">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vælg</th>
+                            <th>Personale</th>
+                            <th *ngFor="let question of questions" (click)="sortByQuestion(question)">
+                                {{ question.title }}
+                                <i *ngIf="sortField === question.id && sortOrder === 'ASC'" class="uil uil-arrow-up"></i>
+                                <i *ngIf="sortField === question.id && sortOrder === 'DESC'" class="uil uil-arrow-down"></i>
+                            </th>
+                            <th>Godkendt</th>
+                            <th>Se mere</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="dataRows.length > 0 && formGroup">
+                        <tr *ngFor="let row of dataRows; let i = index">
+                            <!-- Checkbox -->
+                            <td [formGroupName]="'checkboxes'">
+                                <input type="checkbox" [formControlName]="row.id.toString()">
+                            </td>
+
+                            <td class="capitalize">{{ row.user?.username || 'Unknown' }}</td>
         
-        <table>
-            <thead>
-                <tr>
-                    <th>Vælg</th> <!-- Ny overskrift for checkbox kolonne -->
-                    <th>Personale</th>
-                    <th>Elev</th>
-                    <th>Tidspunkt</th>
-                    <th>Type</th>
-                    <th>Reaktion</th>
-                    <th>Konsekvens</th>
-                    <th>Underskrevet</th>
-                    <th>Se mere</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let row of rows">
-                    <td><input type="checkbox" [(ngModel)]="row.selected"></td> <!-- Checkbox kolonne -->
-                    <td>{{ row.personale }}</td>
-                    <td>{{ row.elev }}</td>
-                    <td>{{ row.tidspunkt }}</td>
-                    <td>{{ row.type }}</td>
-                    <td>{{ row.reaktion }}</td>
-                    <td>{{ row.konsekvens }}</td>
-                    <td>{{ row.underskrevet }}</td>
-                    <td><button (click)="viewMore(row)">Se mere</button></td>
-                </tr>
-            </tbody>
-        </table>
+                            <!-- Answer columns for each question -->
+                            <td *ngFor="let question of questions">
+                                <ng-container *ngIf="row.answers">
+                                    <span *ngFor="let answer of row.answers">
+                                        <span *ngIf="answer.question.id === question.id">
+                                            <ng-container
+                                                *ngIf="answer.question.type === 'SELECT_ONE' || answer.question.type === 'MULTI_SELECT'; else showAnswer">
+                                                <ng-container *ngIf="answer.answerChoices && answer.answerChoices.length > 0">
+                                                    <ng-container *ngFor="let choice of answer.answerChoices">
+                                                        <span *ngIf="choice.questionChoice && choice.questionChoice.choice">
+                                                            {{ choice.questionChoice.choice }}
+                                                        </span>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                            <ng-template #showAnswer>
+                                                <span *ngIf="answer.answer">{{ answer.answer }}</span>
+                                            </ng-template>
+                                        </span>
+                                    </span>
+                                </ng-container>
+                            </td>
+                            
+                            <td>
+                                <ng-container [ngSwitch]="row.approved">
+                                    <i *ngSwitchCase="'APPROVED'" class="uil uil-check text-green-600 text-3xl" title="Approved"></i>
+                            
+                                    <i *ngSwitchCase="'WAITING'" class="uil uil-hourglass text-yellow-600 text-3xl" title="Waiting"></i>
+                            
+                                    <i *ngSwitchCase="'NOT_APPROVED'" class="uil uil-times text-red-600 text-3xl" title="Not Approved"></i>
+                            
+                                    <i *ngSwitchDefault class="uil uil-question-circle" title="Unknown Status"></i>
+                                </ng-container>
+                            </td>
+
+        
+                            <td><button (click)="viewMore(row)">Se mere</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+
+        <app-table-pagination
+            [currentPage]="currentPage"
+            [totalResults]="totalItems"
+            [totalPages]="totalPages"
+            (onPageChange)="paginate($event)"
+        ></app-table-pagination>
+
         <div class="actions-group">
             <button class="see-all-btn" >Se alle hændelser</button>
-            <button class="print-button">Udskriv</button>
+            <button class="print-button" (click)="onClickPrint()">Udskriv</button>
         </div>
     </div>
 </article>
