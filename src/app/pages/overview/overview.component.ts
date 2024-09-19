@@ -1,31 +1,52 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { HttpService } from '../../services/http.service';
 import { TableFilter } from '../../interfaces/iTableFilter';
 import { Case } from '../../interfaces/iCase';
 import { Question } from '../../interfaces/iQuestion';
-import { TablePaginationComponent } from "../../components/table-pagination/table-pagination.component";
+import { TablePaginationComponent } from '../../components/table-pagination/table-pagination.component';
 import { TablePaginationReturn } from '../../interfaces/SearchInterfaces';
 import { iUser } from '../../interfaces/iUser';
 import { catchError, forkJoin, throwError } from 'rxjs';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TablePaginationComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TablePaginationComponent,
+  ],
   templateUrl: './overview.component.html',
-  styleUrl: './overview.component.scss'
+  styleUrl: './overview.component.scss',
 })
-
-export class OverviewComponent implements OnInit{
+export class OverviewComponent implements OnInit {
   // Data
   categories = ['Indskoling', 'Udskoling', 'Forældre'];
-  names = ['Peter', 'Lone']; 
+  names = ['Peter', 'Lone'];
   rows = [
-    { selected: false, personale: 'Peter', elev: 'Indskoling', tidspunkt: '2024-09-05 10:00', type: 'Fysisk', reaktion: '6', konsekvens: 'Ingen', underskrevet: 'Nej' },
+    {
+      selected: false,
+      personale: 'Peter',
+      elev: 'Indskoling',
+      tidspunkt: '2024-09-05 10:00',
+      type: 'Fysisk',
+      reaktion: '6',
+      konsekvens: 'Ingen',
+      underskrevet: 'Nej',
+    },
   ];
-  columns: any[] = [];  // Fyld med dine data
+  columns: any[] = []; // Fyld med dine data
 
   public currentPage: number = 1;
   public totalPages: number = -1;
@@ -37,17 +58,17 @@ export class OverviewComponent implements OnInit{
   public questions: Question[] = [];
 
   public users: iUser[] = [];
-  public status: { value: string, label: string }[] = [
+  public status: { value: string; label: string }[] = [
     { value: 'WAITING', label: 'Venter på svar' },
     { value: 'APPROVED', label: 'Godkendt' },
-    { value: 'NOT_APPROVED', label: 'Afvist' }
+    { value: 'NOT_APPROVED', label: 'Afvist' },
   ];
 
   public sortField: number | null = null;
   public sortOrder: string = 'ASC';
-  
+
   // Variabler til ngModel
-  selectedDateSort: string = 'desc';  // Standardværdi
+  selectedDateSort: string = 'desc'; // Standardværdi
   selectedName: string = '';
   selectedCategory: string = '';
 
@@ -56,17 +77,17 @@ export class OverviewComponent implements OnInit{
   constructor(
     private httpService: HttpService,
     private fb: FormBuilder,
-  ) {
-  }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.createFormGroup();
-    this.selectedName = this.names[0];  // Standard til første navn
-    this.selectedCategory = this.categories[0];  // Standard til første kategori
+    this.selectedName = this.names[0]; // Standard til første navn
+    this.selectedCategory = this.categories[0]; // Standard til første kategori
 
     const filterData: TableFilter = {
       page: 1,
-      limit: 2
+      limit: 2,
     };
 
     this.fetchCases(filterData);
@@ -74,7 +95,8 @@ export class OverviewComponent implements OnInit{
     this.httpService.getData('questions/get-questions').subscribe(
       (response) => {
         this.questions = response;
-      }, (error) => {
+      },
+      (error) => {
         console.error('Error fetching questions!', error);
       }
     );
@@ -82,29 +104,32 @@ export class OverviewComponent implements OnInit{
     this.httpService.getData('users/get-all').subscribe(
       (response) => {
         this.users = response;
-      }, (error) => {
+      },
+      (error) => {
         console.error('Error fetching users!', error);
       }
     );
   }
 
   viewMore(row: any) {
-    console.log('Vis mere for:', row);
-    // Implementer din logik for at vise mere information om den valgte række
+    console.log(row);
+    this.router.navigate(['/view-case/' + row.id]);
   }
 
   createFormGroup() {
     this.formGroup = this.fb.group({
-      checkboxes: this.fb.group({}),  // Dynamically add checkboxes here later
+      checkboxes: this.fb.group({}), // Dynamically add checkboxes here later
       selectedUserId: new FormControl(null),
       caseStatus: new FormControl(null),
     });
 
-    this.formGroup.get('selectedUserId')?.valueChanges.subscribe(selectedId => {
-      this.fetchWithParams();
-    });
+    this.formGroup
+      .get('selectedUserId')
+      ?.valueChanges.subscribe((selectedId) => {
+        this.fetchWithParams();
+      });
 
-    this.formGroup.get('caseStatus')?.valueChanges.subscribe(caseStatus => {
+    this.formGroup.get('caseStatus')?.valueChanges.subscribe((caseStatus) => {
       this.fetchWithParams();
     });
   }
@@ -114,7 +139,7 @@ export class OverviewComponent implements OnInit{
     const checkboxGroup = this.formGroup.get('checkboxes') as FormGroup;
 
     this.dataRows.forEach((row) => {
-      checkboxGroup.addControl(row.id.toString(), this.fb.control(false));  // Add control using the row's ID
+      checkboxGroup.addControl(row.id.toString(), this.fb.control(false)); // Add control using the row's ID
     });
   }
 
@@ -135,7 +160,7 @@ export class OverviewComponent implements OnInit{
       limit: 10,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      status: this.formGroup.get('caseStatus').value
+      status: this.formGroup.get('caseStatus').value,
     };
 
     if (!filterData.userId || filterData.userId.toString() === 'null') {
@@ -146,7 +171,7 @@ export class OverviewComponent implements OnInit{
       delete filterData.status;
     }
 
-    this.fetchCases(filterData);  // Call fetchCases to get the data
+    this.fetchCases(filterData); // Call fetchCases to get the data
   }
 
   fetchCases(filterData: TableFilter) {
@@ -170,15 +195,18 @@ export class OverviewComponent implements OnInit{
   updateCheckboxes() {
     const checkboxGroup = this.formGroup.get('checkboxes') as FormGroup;
 
-    Object.keys(checkboxGroup.controls).forEach(key => {
+    Object.keys(checkboxGroup.controls).forEach((key) => {
       checkboxGroup.removeControl(key);
     });
 
-    this.dataRows.forEach(row => {
-      checkboxGroup.addControl(row.id.toString(), new FormControl(false));  // Default unchecked
+    this.dataRows.forEach((row) => {
+      checkboxGroup.addControl(row.id.toString(), new FormControl(false)); // Default unchecked
     });
 
-    this.formGroup.patchValue({ checkboxes: checkboxGroup.value }, { emitEvent: false });
+    this.formGroup.patchValue(
+      { checkboxes: checkboxGroup.value },
+      { emitEvent: false }
+    );
   }
 
   sortByQuestion(question: any) {
@@ -189,56 +217,57 @@ export class OverviewComponent implements OnInit{
       this.sortField = question.id;
       this.sortOrder = 'ASC';
     }
-    
+
     this.fetchWithParams();
   }
 
-disprove() {
-  const requests = this.getCheckedCases().map(id => 
-    this.httpService.getData(`cases/disprove-case/${id}`).pipe(
-      catchError(error => {
-        console.error(`Error disproving case with id ${id}`, error);
-        return throwError(error);
-      })
-    )
-  );
+  disprove() {
+    const requests = this.getCheckedCases().map((id) =>
+      this.httpService.getData(`cases/disprove-case/${id}`).pipe(
+        catchError((error) => {
+          console.error(`Error disproving case with id ${id}`, error);
+          return throwError(error);
+        })
+      )
+    );
 
-  forkJoin(requests).subscribe({
-    next: () => {
-      this.fetchWithParams();
-    },
-    error: (error) => {
-      console.error('Error in batch request', error);
-    }
-  });
-}
+    forkJoin(requests).subscribe({
+      next: () => {
+        this.fetchWithParams();
+      },
+      error: (error) => {
+        console.error('Error in batch request', error);
+      },
+    });
+  }
 
   approve() {
-    const requests = this.getCheckedCases().map(id => 
-    this.httpService.getData(`cases/approve-case/${id}`).pipe(
-      catchError(error => {
-        console.error(`Error approving case with id ${id}`, error);
-        return throwError(error);
-      })
-    )
-  );
+    const requests = this.getCheckedCases().map((id) =>
+      this.httpService.getData(`cases/approve-case/${id}`).pipe(
+        catchError((error) => {
+          console.error(`Error approving case with id ${id}`, error);
+          return throwError(error);
+        })
+      )
+    );
 
-  forkJoin(requests).subscribe({
-    next: () => {
-      this.fetchWithParams();
-    },
-    error: (error) => {
-      console.error('Error in batch request', error);
-    }
-  });
-}
+    forkJoin(requests).subscribe({
+      next: () => {
+        this.fetchWithParams();
+      },
+      error: (error) => {
+        console.error('Error in batch request', error);
+      },
+    });
+  }
 
   getCheckedCases(): number[] {
-    const checkedCases: number[] = Object.entries(this.formGroup.get('checkboxes').value)
-    .filter(([key, value]) => value === true)
-    .map(([key]) => Number(key));
+    const checkedCases: number[] = Object.entries(
+      this.formGroup.get('checkboxes').value
+    )
+      .filter(([key, value]) => value === true)
+      .map(([key]) => Number(key));
 
     return checkedCases;
   }
 }
-

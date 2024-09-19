@@ -1,1 +1,71 @@
-<p>details-page works!</p>
+<article>
+    <section class="capitalize">
+        Personale: {{case.user.username}}
+    </section>
+    <section class="capitalize">
+        Status: {{case.approved}}
+    </section>
+
+    <section class="flex gap-8 flex-col">
+      <ng-container *ngFor="let answer of case.answers">
+        <!-- Switch for questions -->
+        <div [ngSwitch]="answer.question.type">
+          
+          <!-- Case for Date -->
+          <div *ngSwitchCase="'DATE'">
+            <app-date [title]="answer.question.title" [description]="answer.question.description" [time]="answer.answer"></app-date>
+          </div>
+      
+          <!-- Case for Text -->
+          <div *ngSwitchCase="'TEXT'">
+            <app-fields [answer]="answer.answer" [questionTitle]="answer.question.title" [description]="answer.question.description"></app-fields>
+          </div>
+      
+          <!-- Case for SelectOne -->
+          <div *ngSwitchCase="'SELECT_ONE'">
+            <app-selection 
+                [title]="answer.question.title" 
+                [description]="answer.question.description"
+                [answer]="answer.answerChoices"></app-selection>
+          </div>
+      
+          <!-- Case for MultiSelect -->
+          <div *ngSwitchCase="'MULTI_SELECT'">
+            <app-selection 
+                [title]="answer.question.title" 
+                [description]="answer.question.description"
+                [answer]="answer.answerChoices"></app-selection>
+          </div>
+      
+          <!-- Case for Scale -->
+          <div *ngSwitchCase="'SCALE'">
+            <app-scale 
+                [initialRating]="+answer.answer" 
+                [title]="answer.question.title" 
+                [description]="answer.question.description">
+            </app-scale>
+          </div>
+      
+          <!-- Case for YesNo -->
+          <div *ngSwitchCase="'YES_NO'">
+            <app-yes-no 
+                [answer]="answer.answer" 
+                [title]="answer.question.title" 
+                [description]="answer.question.description">
+            </app-yes-no>
+          </div>
+      
+          <!-- Default case -->
+          <div *ngSwitchDefault>
+            Unknown question type
+          </div>
+      
+        </div>
+      </ng-container>
+        
+      </section>
+      
+
+
+
+</article>

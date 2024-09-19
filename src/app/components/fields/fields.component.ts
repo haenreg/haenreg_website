@@ -1,17 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-fields',
   standalone: true,
   imports: [],
   templateUrl: './fields.component.html',
-  styleUrl: './fields.component.scss'
+  styleUrl: './fields.component.scss',
 })
 export class FieldsComponent {
-  questionTitle: string = 'Titel';
+  @Input() questionTitle: string = 'Titel';
+  @Input() description: string = 'description';
 
-
-  answer: string = 'Det hentede svar';
-
-
+  @Input() answer: string = 'Det hentede svar';
 }
