@@ -1,0 +1,12 @@
+<article class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 cursor-pointer">
+    <section class="font-semibold text-lg mb-2">{{ question.title }}</section>
+    <section class="text-gray-600 mb-4">{{ question.description }}</section>
+    <section class="text-sm text-gray-500 italic mb-4">{{ question.type }}</section>
+    
+    <section class="space-y-1">
+      <p *ngFor="let choice of question.questionChoices" class="bg-gray-100 p-2 rounded-md">
+        {{ choice.choice }}
+      </p>
+    </section>
+  </article>
+  

@@ -8,6 +8,7 @@ import { FieldsComponent } from './components/fields/fields.component';
 import { ScaleComponent } from './components/scale/scale.component';
 import { YesNoComponent } from './components/yes-no/yes-no.component';
 import { DetailsPageComponent } from './pages/details-page/details-page.component';
+import { ManageQuestionsPageComponent } from './pages/manage-questions-page/manage-questions-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,6 +17,11 @@ export const routes: Routes = [
   {
     path: 'view-case/:id',
     component: DetailsPageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'manage-questions',
+    component: ManageQuestionsPageComponent,
     canActivate: [authGuard],
   },
   { path: 'view-event', component: ViewEventComponent },
