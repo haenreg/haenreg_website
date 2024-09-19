@@ -1,1 +1,13 @@
-<p>selection works!</p>
+<article>
+    <section class="questionTitle">
+        {{title}}
+    </section>
+    <section class="questionDescription">
+        {{description}}
+    </section>
+    <ul>
+        <li *ngFor="let choice of answer">
+            {{choice.questionChoice.choice}}
+        </li>
+    </ul>
+</article>

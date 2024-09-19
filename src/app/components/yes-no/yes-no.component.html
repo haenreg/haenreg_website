@@ -1,8 +1,8 @@
 <div class="yes-no-container">
-    <h2>{{ title }}</h2>
-    <p>{{ description }}</p>
+    <section class="questionTitle">{{ title }}</section>
+    <section class="questionDescription">{{ description }}</section>
   
-    <div class="option-container">
+    <div class="gap-8 flex">
       <span
         class="option"
         [class.selected]="answer === 'YES'"

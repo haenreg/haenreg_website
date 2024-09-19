@@ -6,8 +6,8 @@
         Status: {{case.approved}}
     </section>
 
-    <section *ngFor="let answer of case.answers">
-      
+    <section class="flex gap-8 flex-col">
+      <ng-container *ngFor="let answer of case.answers">
         <!-- Switch for questions -->
         <div [ngSwitch]="answer.question.type">
           
@@ -23,16 +23,18 @@
       
           <!-- Case for SelectOne -->
           <div *ngSwitchCase="'SELECT_ONE'">
-            <select [value]="answer.response" disabled>
-              <option *ngFor="let option of answer.question.options" [value]="option">{{ option }}</option>
-            </select>
+            <app-selection 
+                [title]="answer.question.title" 
+                [description]="answer.question.description"
+                [answer]="answer.answerChoices"></app-selection>
           </div>
       
           <!-- Case for MultiSelect -->
           <div *ngSwitchCase="'MULTI_SELECT'">
-            <div *ngFor="let option of answer.question.options">
-              <input type="checkbox" [checked]="answer.response.includes(option)" disabled /> {{ option }}
-            </div>
+            <app-selection 
+                [title]="answer.question.title" 
+                [description]="answer.question.description"
+                [answer]="answer.answerChoices"></app-selection>
           </div>
       
           <!-- Case for Scale -->
@@ -59,6 +61,8 @@
           </div>
       
         </div>
+      </ng-container>
+        
       </section>
       
 

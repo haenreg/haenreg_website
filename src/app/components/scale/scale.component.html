@@ -1,6 +1,6 @@
 <div class="slider-container">
-    <h2>{{ title }}</h2> 
-    <p>{{ description }}</p> 
+    <section class="questionTitle">{{ title }}</section> 
+    <section class="questionDescription">{{ description }}</section> 
     <input
       type="range"
       [min]="min"
@@ -12,7 +12,7 @@
     />
   
 
-    <div class="slider-value">{{ currentRating }}</div>
+    <div class="slider-value">{{ currentRating }}/10</div>
 
   </div>
   

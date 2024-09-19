@@ -7,6 +7,7 @@ import { ScaleComponent } from '../../components/scale/scale.component';
 import { YesNoComponent } from '../../components/yes-no/yes-no.component';
 import { FieldsComponent } from '../../components/fields/fields.component';
 import { DateComponent } from '../../components/date/date.component';
+import { SelectionComponent } from '../../components/selection/selection.component';
 
 @Component({
   selector: 'app-details-page',
@@ -18,6 +19,7 @@ import { DateComponent } from '../../components/date/date.component';
     YesNoComponent,
     FieldsComponent,
     DateComponent,
+    SelectionComponent,
   ],
   templateUrl: './details-page.component.html',
   styleUrl: './details-page.component.scss',
