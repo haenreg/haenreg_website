@@ -1,5 +1,10 @@
 export interface QuestionChoice {
     id: number;
     choice: string;
-    dependent: QuestionChoice;
+    dependent: DependentQuestionChoice[];
+}
+
+export interface DependentQuestionChoice {
+    id: number;
+    choice: string;
 }

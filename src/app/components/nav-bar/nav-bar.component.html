@@ -7,7 +7,17 @@
         <p class="capitalize">{{ (userStore.user$ | async)?.organization }}</p>
     </section>
 
-    <section>
+    <section class="flex gap-8">
+        <app-button 
+            [buttonText]="'Hændelse overblik'"
+            [buttonIcon]="'file-search-alt'"
+            (onButtonClicked)="onCase()">
+        </app-button>
+        <app-button 
+            [buttonText]="'Spørgsmål overblik'"
+            [buttonIcon]="'file-question'"
+            (onButtonClicked)="onQuestion()">
+        </app-button>
         <app-button
             [buttonText]="'Log ud'"
             [buttonIcon]="'signout'"
