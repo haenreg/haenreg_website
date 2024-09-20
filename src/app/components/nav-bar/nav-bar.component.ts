@@ -23,4 +23,13 @@ export class NavBarComponent {
     this.userStore.clearUser();
     this.router.navigate(['/']);
   }
+
+  onCase() {
+    this.router.navigate(['/overview']);
+  }
+
+
+  onQuestion() {
+    this.router.navigate(['/questions']);
+  }
 }

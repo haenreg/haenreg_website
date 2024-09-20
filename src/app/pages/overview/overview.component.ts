@@ -19,13 +19,6 @@ import { catchError, forkJoin, throwError } from 'rxjs';
 })
 
 export class OverviewComponent implements OnInit{
-  // Data
-  categories = ['Indskoling', 'Udskoling', 'Forældre'];
-  names = ['Peter', 'Lone']; 
-  rows = [
-    { selected: false, personale: 'Peter', elev: 'Indskoling', tidspunkt: '2024-09-05 10:00', type: 'Fysisk', reaktion: '6', konsekvens: 'Ingen', underskrevet: 'Nej' },
-  ];
-  columns: any[] = [];  // Fyld med dine data
 
   public currentPage: number = 1;
   public totalPages: number = -1;
@@ -45,11 +38,6 @@ export class OverviewComponent implements OnInit{
 
   public sortField: number | null = null;
   public sortOrder: string = 'ASC';
-  
-  // Variabler til ngModel
-  selectedDateSort: string = 'desc';  // Standardværdi
-  selectedName: string = '';
-  selectedCategory: string = '';
 
   public formGroup: FormGroup = undefined;
 
@@ -61,8 +49,6 @@ export class OverviewComponent implements OnInit{
 
   ngOnInit(): void {
     this.createFormGroup();
-    this.selectedName = this.names[0];  // Standard til første navn
-    this.selectedCategory = this.categories[0];  // Standard til første kategori
 
     const filterData: TableFilter = {
       page: 1,
