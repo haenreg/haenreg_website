@@ -1,1 +1,10 @@
-<p>manage-questions-page works!</p>
+<article class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <ng-container *ngFor="let question of questions">
+      <app-question-card (click)="onQuestionClick(question)" [question]="question"></app-question-card>
+    </ng-container>
+    <section (click)="onQuestionClick()" class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 cursor-pointer">
+        <section class="font-semibold text-lg mb-2">
+            Opret spørgsmål
+        </section>
+    </section>
+</article>

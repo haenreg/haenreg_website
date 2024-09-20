@@ -1,4 +1,6 @@
-<app-nav-bar *ngIf="!isLoginPage"></app-nav-bar>
-<div [ngClass]="{'login-background': isLoginPage, 'default-background': !isLoginPage}">
-  <router-outlet></router-outlet>
-</div>
+<article [ngClass]="{'login-background': isLoginPage, 'default-background': !isLoginPage}">
+  <app-nav-bar *ngIf="!isLoginPage"></app-nav-bar>
+  <div class="content mt-6 w-full">
+    <router-outlet></router-outlet>
+  </div>
+</article>

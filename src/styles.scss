@@ -14,38 +14,40 @@ body {
     height: 100%;
     width: 100%;
     box-sizing: border-box;
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
 }
 
-.default-background {
+.default-background,
+.login-background {
     background: linear-gradient(135deg, #EDF4FA, #EBEAE7);
-    height: 100vh;
+    /* Shared gradient */
+    min-height: 100vh;
     width: 100vw;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
 }
 
 .login-background {
     background: linear-gradient(135deg, #83A8C9, #415363);
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     color: white;
 }
 
 app-nav-bar {
     position: fixed;
     top: 0;
-    width: 100vw;
-    // background-color: #415363;
-    // color: white;
+    width: 100%;
     padding: 38px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    backdrop-filter: blur(100px);
+    /* Adds blur effect to prevent content visibility through navbar */
+    -webkit-backdrop-filter: blur(10px);
+    /* For Safari */
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Slight transparent background to make navbar readable */
 }
 
 app-nav-bar a {
@@ -56,6 +58,17 @@ app-nav-bar a {
 
 app-nav-bar a:hover {
     text-decoration: underline;
+}
+
+.content {
+    padding-top: 128px;
+    /* Adjust padding to fit below the navbar */
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto;
+    /* Allow vertical scrolling */
 }
 
 .container {

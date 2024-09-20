@@ -1,0 +1,46 @@
+<article class="p-4 w-full h-full relative">
+    <form [formGroup]="formGroup" class="flex flex-col gap-8">
+
+        <section class="flex flex-col">
+            <label for="title">Titel: </label>
+            <input id="title" formControlName="title">
+        </section>
+
+        <section class="flex flex-col">
+            <label for="description">Beskrivelse: </label>
+            <input id="description" formControlName="description">
+        </section>
+
+        <section class="flex flex-col">
+            <label for="type">Type: </label>
+            <select id="type" formControlName="type" class="form-select rounded-lg border border-gray-300 p-2 text-gray-900">
+                <option *ngFor="let type of questionTypes" [value]="type">{{ type }}</option>
+              </select>
+        </section>
+        <ng-container *ngIf="formGroup.get('type')?.value === 'MULTI_SELECT' || formGroup.get('type')?.value === 'SELECT_ONE'">
+            <ng-container *ngFor="let choice of questionChoice; let i = index">
+                <section class="flex justify-center items-center gap-4">
+                    <app-question-choice-card [choice]="choice"></app-question-choice-card>
+                    <button (click)="removeChoice(i)"
+                        class="border border-solid border-black h-8 w-8 rounded-full flex justify-center items-center bg-white cursor-pointer">
+                        <i class="uil uil-minus"></i>
+                    </button>
+                </section>
+            </ng-container>
+
+            <section class="flex justify-center">
+                <button (click)="addChoice()"
+                    class="border border-solid border-black h-8 w-8 rounded-full flex justify-center items-center bg-white cursor-pointer">
+                    <i class="uil uil-plus"></i>
+                </button>
+            </section>
+        </ng-container>
+    </form>
+    <section class="absolute -top-4 right-0">
+        <button (click)="save()" class="bg-white border border-solid border-gray-400 rounded-md p-1 hover:bg-slate-100">
+            Gem
+        </button>
+    </section>
+    
+</article>
+

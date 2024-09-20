@@ -30,23 +30,9 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',
 })
-export class OverviewComponent implements OnInit {
-  // Data
-  categories = ['Indskoling', 'Udskoling', 'Forældre'];
-  names = ['Peter', 'Lone'];
-  rows = [
-    {
-      selected: false,
-      personale: 'Peter',
-      elev: 'Indskoling',
-      tidspunkt: '2024-09-05 10:00',
-      type: 'Fysisk',
-      reaktion: '6',
-      konsekvens: 'Ingen',
-      underskrevet: 'Nej',
-    },
-  ];
-  columns: any[] = []; // Fyld med dine data
+
+
+export class OverviewComponent implements OnInit{
 
   public currentPage: number = 1;
   public totalPages: number = -1;
@@ -58,36 +44,30 @@ export class OverviewComponent implements OnInit {
   public questions: Question[] = [];
 
   public users: iUser[] = [];
-  public status: { value: string; label: string }[] = [
+  public status: { value: string, label: string }[] = [
     { value: 'WAITING', label: 'Venter på svar' },
     { value: 'APPROVED', label: 'Godkendt' },
-    { value: 'NOT_APPROVED', label: 'Afvist' },
+    { value: 'NOT_APPROVED', label: 'Afvist' }
   ];
 
   public sortField: number | null = null;
   public sortOrder: string = 'ASC';
-
-  // Variabler til ngModel
-  selectedDateSort: string = 'desc'; // Standardværdi
-  selectedName: string = '';
-  selectedCategory: string = '';
 
   public formGroup: FormGroup = undefined;
 
   constructor(
     private httpService: HttpService,
     private fb: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+  ) {
+  }
 
   ngOnInit(): void {
     this.createFormGroup();
-    this.selectedName = this.names[0]; // Standard til første navn
-    this.selectedCategory = this.categories[0]; // Standard til første kategori
 
     const filterData: TableFilter = {
       page: 1,
-      limit: 2,
+      limit: 2
     };
 
     this.fetchCases(filterData);
@@ -95,8 +75,7 @@ export class OverviewComponent implements OnInit {
     this.httpService.getData('questions/get-questions').subscribe(
       (response) => {
         this.questions = response;
-      },
-      (error) => {
+      }, (error) => {
         console.error('Error fetching questions!', error);
       }
     );
@@ -104,8 +83,7 @@ export class OverviewComponent implements OnInit {
     this.httpService.getData('users/get-all').subscribe(
       (response) => {
         this.users = response;
-      },
-      (error) => {
+      }, (error) => {
         console.error('Error fetching users!', error);
       }
     );
@@ -118,7 +96,7 @@ export class OverviewComponent implements OnInit {
 
   createFormGroup() {
     this.formGroup = this.fb.group({
-      checkboxes: this.fb.group({}), // Dynamically add checkboxes here later
+      checkboxes: this.fb.group({}),  // Dynamically add checkboxes here later
       selectedUserId: new FormControl(null),
       caseStatus: new FormControl(null),
     });
@@ -195,18 +173,15 @@ export class OverviewComponent implements OnInit {
   updateCheckboxes() {
     const checkboxGroup = this.formGroup.get('checkboxes') as FormGroup;
 
-    Object.keys(checkboxGroup.controls).forEach((key) => {
+    Object.keys(checkboxGroup.controls).forEach(key => {
       checkboxGroup.removeControl(key);
     });
 
-    this.dataRows.forEach((row) => {
-      checkboxGroup.addControl(row.id.toString(), new FormControl(false)); // Default unchecked
+    this.dataRows.forEach(row => {
+      checkboxGroup.addControl(row.id.toString(), new FormControl(false));  // Default unchecked
     });
 
-    this.formGroup.patchValue(
-      { checkboxes: checkboxGroup.value },
-      { emitEvent: false }
-    );
+    this.formGroup.patchValue({ checkboxes: checkboxGroup.value }, { emitEvent: false });
   }
 
   sortByQuestion(question: any) {
