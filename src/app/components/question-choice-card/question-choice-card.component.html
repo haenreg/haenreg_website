@@ -1,0 +1,25 @@
+<article class="bg-white bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+    <form [formGroup]="formGroup" class="flex flex-col gap-8">
+        <section class="flex flex-col">
+            <label for="choice">Svarmulighed:</label>
+            <input 
+                id="choice"
+                class="border-black border border-solid rounded-lg p-1"
+                formControlName="choice">
+        </section>
+        <section class="flex flex-col gap-2 pl-4">
+            <ng-container *ngFor="let child of children">
+                <app-child-choice-card [child]="child"></app-child-choice-card>
+            </ng-container>
+        </section>
+    </form>
+
+    <section class="flex justify-center mt-4">
+        <button 
+            (click)="addChild()"
+            class="border border-solid border-black h-8 w-8 rounded-full flex justify-center items-center bg-white cursor-pointer">
+            <i class="uil uil-plus"></i>
+        </button>
+    </section>
+
+</article>

@@ -30,6 +30,6 @@ export class NavBarComponent {
 
 
   onQuestion() {
-    this.router.navigate(['/questions']);
+    this.router.navigate(['/manage-questions']);
   }
 }

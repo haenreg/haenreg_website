@@ -10,11 +10,12 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { QuestionChoice } from '../../interfaces/iQuestionChoice';
+import { QuestionChoiceCardComponent } from "../../components/question-choice-card/question-choice-card.component";
 
 @Component({
   selector: 'app-administrate-question',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, QuestionChoiceCardComponent],
   templateUrl: './administrate-question.component.html',
   styleUrl: './administrate-question.component.scss',
 })
@@ -44,5 +45,14 @@ export class AdministrateQuestionComponent implements OnInit {
         this.question ? this.question.type : QuestionType.Text
       ),
     });
+  }
+
+  addChoice() {
+    const newChoice: QuestionChoice = {
+      choice: '123',
+      id: -1,
+      dependent: undefined,
+    }
+    this.questionChoice.push(newChoice);
   }
 }

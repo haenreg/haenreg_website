@@ -1,4 +1,4 @@
-<article>
+<article class="p-4">
     <form [formGroup]="formGroup" class="flex flex-col gap-8">
 
         <section class="flex flex-col">
@@ -21,11 +21,16 @@
         <ng-container *ngIf="formGroup.get('type')?.value === 'MULTI_SELECT' || formGroup.get('type')?.value === 'SELECT_ONE'">
             <ng-container *ngFor="let choice of questionChoice">
                 <section>
-
-    
+                    <app-question-choice-card [choice]="choice"></app-question-choice-card>
                 </section>
             </ng-container>
 
+            <section class="flex justify-center">
+                <button (click)="addChoice()"
+                    class="border border-solid border-black h-8 w-8 rounded-full flex justify-center items-center bg-white cursor-pointer">
+                    <i class="uil uil-plus"></i>
+                </button>
+            </section>
         </ng-container>
     </form>
 </article>
