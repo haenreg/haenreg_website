@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DependentQuestionChoice } from '../../interfaces/iQuestionChoice';
 import { FormGroup, ReactiveFormsModule, FormControl, FormBuilder } from '@angular/forms';
 
@@ -13,6 +13,7 @@ export class ChildChoiceCardComponent implements OnInit{
   public formGroup: FormGroup;
 
   @Input() child: DependentQuestionChoice;
+  @Output() emitChildrenChange: EventEmitter<any> = new EventEmitter();
 
     constructor(
     private fb: FormBuilder
@@ -21,6 +22,9 @@ export class ChildChoiceCardComponent implements OnInit{
   ngOnInit(): void {
     this.formGroup = this.fb.group({
       choice: new FormControl(this.child.choice)
+    });
+    this.formGroup.get('choice').valueChanges.subscribe(value => {
+      this.child.choice = value;
     });
   }
 }

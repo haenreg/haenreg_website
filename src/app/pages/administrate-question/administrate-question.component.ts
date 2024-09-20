@@ -49,10 +49,14 @@ export class AdministrateQuestionComponent implements OnInit {
 
   addChoice() {
     const newChoice: QuestionChoice = {
-      choice: '123',
+      choice: '',
       id: -1,
-      dependent: undefined,
+      dependent: [],
     }
     this.questionChoice.push(newChoice);
+  }
+
+  removeChoice(index: number) {
+    this.questionChoice.splice(index, 1);
   }
 }

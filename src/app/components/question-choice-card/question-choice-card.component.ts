@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DependentQuestionChoice, QuestionChoice } from '../../interfaces/iQuestionChoice';
 import {
   FormBuilder,
@@ -17,6 +17,7 @@ import { ChildChoiceCardComponent } from "../child-choice-card/child-choice-card
   styleUrl: './question-choice-card.component.scss'
 })
 export class QuestionChoiceCardComponent implements OnInit{
+
   @Input() choice: QuestionChoice;
 
   public formGroup: FormGroup;
@@ -27,16 +28,24 @@ export class QuestionChoiceCardComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
+    this.children = this.choice.dependent;
     this.formGroup = this.fb.group({
       choice: new FormControl(this.choice.choice)
+    });
+    this.formGroup.get('choice').valueChanges.subscribe(value => {
+      this.choice.choice = value;
     });
   }
 
   addChild() {
     const newChild: DependentQuestionChoice = {
       id: -1,
-      choice: '321'
+      choice: ''
     }
-    this.children.push(newChild);
+    this.choice.dependent.push(newChild);
+  }
+
+  removeChild(index: number) {
+    this.choice.dependent.splice(index, 1);
   }
 }

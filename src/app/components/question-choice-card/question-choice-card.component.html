@@ -2,14 +2,22 @@
     <form [formGroup]="formGroup" class="flex flex-col gap-8">
         <section class="flex flex-col">
             <label for="choice">Svarmulighed:</label>
-            <input 
+            <textarea 
                 id="choice"
                 class="border-black border border-solid rounded-lg p-1"
                 formControlName="choice">
+            </textarea>
         </section>
         <section class="flex flex-col gap-2 pl-4">
-            <ng-container *ngFor="let child of children">
-                <app-child-choice-card [child]="child"></app-child-choice-card>
+            <ng-container *ngFor="let child of children; let i = index">
+                <section class="flex justify-center items-center gap-4">
+                    <app-child-choice-card [child]="child"></app-child-choice-card>
+                    <button (click)="removeChild(i)"
+                        class="border border-solid border-black h-8 w-8 rounded-full flex justify-center items-center bg-white cursor-pointer">
+                        <i class="uil uil-minus"></i>
+                    </button>
+                </section>
+                
             </ng-container>
         </section>
     </form>

@@ -11,7 +11,6 @@
             <input id="description" formControlName="description">
         </section>
 
-
         <section class="flex flex-col">
             <label for="type">Type: </label>
             <select id="type" formControlName="type" class="form-select rounded-lg border border-gray-300 p-2 text-gray-900">
@@ -19,9 +18,13 @@
               </select>
         </section>
         <ng-container *ngIf="formGroup.get('type')?.value === 'MULTI_SELECT' || formGroup.get('type')?.value === 'SELECT_ONE'">
-            <ng-container *ngFor="let choice of questionChoice">
-                <section>
+            <ng-container *ngFor="let choice of questionChoice; let i = index">
+                <section class="flex justify-center items-center gap-4">
                     <app-question-choice-card [choice]="choice"></app-question-choice-card>
+                    <button (click)="removeChoice(i)"
+                        class="border border-solid border-black h-8 w-8 rounded-full flex justify-center items-center bg-white cursor-pointer">
+                        <i class="uil uil-minus"></i>
+                    </button>
                 </section>
             </ng-container>
 
