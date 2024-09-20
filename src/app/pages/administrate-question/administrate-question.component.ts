@@ -11,6 +11,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { QuestionChoice } from '../../interfaces/iQuestionChoice';
 import { QuestionChoiceCardComponent } from "../../components/question-choice-card/question-choice-card.component";
+import { HttpService } from '../../services/http.service';
 
 @Component({
   selector: 'app-administrate-question',
@@ -27,7 +28,8 @@ export class AdministrateQuestionComponent implements OnInit {
 
   constructor(
     private questionService: QuestionService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private httpService: HttpService,
   ) {}
 
   ngOnInit() {
@@ -59,4 +61,33 @@ export class AdministrateQuestionComponent implements OnInit {
   removeChoice(index: number) {
     this.questionChoice.splice(index, 1);
   }
+
+  save() {
+    const questionReq: QuestionRequest = {
+      title: this.formGroup.get('title').value,
+      description: this.formGroup.get('description').value,
+      type: this.formGroup.get('type').value,
+      questionChoices: this.questionChoice
+    }
+    let url = '';
+
+    console.log(questionReq);
+
+    if (this.question) {
+      url = `questions/update-question/${this.question.id}`;
+    } else {
+      url = 'questions/create-question';
+    }
+    this.httpService.postData(url, questionReq).subscribe(res => {
+      console.log(res);
+    })
+  }
+}
+
+
+export interface QuestionRequest {
+  title: string;
+  description: string;
+  type: string;
+  questionChoices: QuestionChoice[];
 }

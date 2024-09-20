@@ -1,4 +1,4 @@
-<article class="p-4">
+<article class="p-4 w-full h-full relative">
     <form [formGroup]="formGroup" class="flex flex-col gap-8">
 
         <section class="flex flex-col">
@@ -36,4 +36,11 @@
             </section>
         </ng-container>
     </form>
+    <section class="absolute -top-4 right-0">
+        <button (click)="save()" class="bg-white border border-solid border-gray-400 rounded-md p-1 hover:bg-slate-100">
+            Gem
+        </button>
+    </section>
+    
 </article>
+
